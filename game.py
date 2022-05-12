@@ -1,6 +1,7 @@
 import pygame
 import random_list as r
 import random
+import list_letters as ll
 
 #colors
 bgblue = "#82EEFD"
@@ -15,16 +16,19 @@ class HangMan:
         self.screenDim.blit(mesg, [xB+100+self.offset, yB+180])
         self.offset = self.offset + 50
 
-    #game loop
-    def game_loop(self):
-        xB = 0
-        yB = 0
-        self.screenDim.fill(bgblue) 
+    #function to print all letters
+    def call_print(xB, yB, self):
         for i in self.arr:
                 if(self.guessed_letters.count(i) == 0):
                     HangMan.print_char(xB, yB, '_', self)
                 else:
                     HangMan.print_char(xB, yB, i, self)
+    #game loop
+    def game_loop(self):
+        xB = 0
+        yB = 0
+        self.screenDim.fill(bgblue) 
+        HangMan.call_print(xB, yB, self)
         while(self.gameover == False):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -39,11 +43,15 @@ class HangMan:
                     else:
                         xB = 0
                         yB = 0  
-                    for i in self.arr:
-                        if(self.guessed_letters.count(i) == 0):
-                            HangMan.print_char(xB, yB, '_', self)
-                        else:
-                            HangMan.print_char(xB, yB, i, self)
+                    HangMan.call_print(xB, yB, self)
+                if event.type == pygame.KEYDOWN:
+                    if event.key in ll.letters:
+                        self.guessed_letters.append(chr(event.key))
+                        self.screenDim.fill(bgblue)
+                        self.offset = 0
+                        HangMan.call_print(xB, yB, self)
+#test here
+                        print(self.guessed_letters)
             pygame.display.update()
 
     def __init__(self) -> None: 
@@ -53,9 +61,11 @@ class HangMan:
         self.gameover = False
         #finding a random word
         self.index = random.randrange(len(r.words))
-        self.arr = list(r.words[self.index])  
+        self.arr = list(r.words[self.index]) 
+#test here
+        print(self.arr)
         self.guessed_letters = [] 
-        self.offset = 0
+        self.offset = 0 
         HangMan.game_loop(self)
 
 pygame.init()
