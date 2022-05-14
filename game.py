@@ -1,3 +1,4 @@
+from itertools import count
 import pygame
 import random_list as r
 import random
@@ -9,9 +10,25 @@ black = "#242526"
 
 class HangMan:
 
+    #printing the guessed letters
+    def print_guessed_char(xB, yB, self):
+        font_style = pygame.font.Font("EvilEmpire.ttf", 30)
+        mesg = font_style.render("Guessed Letters: ", True, black)
+        self.screenDim.blit(mesg, [xB+100, yB+300])
+        gx_offset = 220
+        gy_offset = 0
+        _count = 0
+        for letter in self.guessed_letters:
+            if(_count >0 and _count%10 == 0):
+                gx_offset = 220
+                gy_offset = gy_offset + 30
+            let = font_style.render(letter, True, black)
+            self.screenDim.blit(let, [xB+100+gx_offset, yB+300+gy_offset])
+            gx_offset = gx_offset + 30
+            _count = _count+1
     #printing characters
     def print_char(xB, yB, c, self):
-        font_style = pygame.font.Font("EvilEmpire.ttf", 80) 
+        font_style = pygame.font.Font("EvilEmpire.ttf", 60) 
         mesg = font_style.render(c, True, black)
         self.screenDim.blit(mesg, [xB+100+self.offset, yB+180])
         self.offset = self.offset + 50
@@ -29,6 +46,7 @@ class HangMan:
         yB = 0
         self.screenDim.fill(bgblue) 
         HangMan.call_print(xB, yB, self)
+        HangMan.print_guessed_char(xB, yB, self)
         while(self.gameover == False):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -44,12 +62,14 @@ class HangMan:
                         xB = 0
                         yB = 0  
                     HangMan.call_print(xB, yB, self)
+                    HangMan.print_guessed_char(xB, yB, self)
                 if event.type == pygame.KEYDOWN:
                     if event.key in ll.letters:
                         self.guessed_letters.append(chr(event.key))
                         self.screenDim.fill(bgblue)
                         self.offset = 0
                         HangMan.call_print(xB, yB, self)
+                        HangMan.print_guessed_char(xB, yB, self)
 #test here
                         print(self.guessed_letters)
             pygame.display.update()
