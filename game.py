@@ -1,4 +1,3 @@
-from itertools import count
 import pygame
 import random_list as r
 import random
@@ -7,20 +6,20 @@ import list_letters as ll
 #colors
 bgblue = "#82EEFD"
 black = "#242526"
+white = "#FFFFFF"
 
 class HangMan:
-
     #printing the guessed letters
     def print_guessed_char(xB, yB, self):
         font_style = pygame.font.Font("EvilEmpire.ttf", 30)
         mesg = font_style.render("Guessed Letters: ", True, black)
         self.screenDim.blit(mesg, [xB+100, yB+300])
-        gx_offset = 220
-        gy_offset = 0
+        gx_offset = 0
+        gy_offset = 30
         _count = 0
         for letter in self.guessed_letters:
             if(_count >0 and _count%10 == 0):
-                gx_offset = 220
+                gx_offset = 0
                 gy_offset = gy_offset + 30
             let = font_style.render(letter, True, black)
             self.screenDim.blit(let, [xB+100+gx_offset, yB+300+gy_offset])
@@ -45,6 +44,7 @@ class HangMan:
         xB = 0
         yB = 0
         self.screenDim.fill(bgblue) 
+        pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
         HangMan.call_print(xB, yB, self)
         HangMan.print_guessed_char(xB, yB, self)
         while(self.gameover == False):
@@ -61,12 +61,14 @@ class HangMan:
                     else:
                         xB = 0
                         yB = 0  
+                    pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
                     HangMan.call_print(xB, yB, self)
                     HangMan.print_guessed_char(xB, yB, self)
-                if event.type == pygame.KEYDOWN:
-                    if event.key in ll.letters:
+                if event.type == pygame.KEYDOWN: 
+                    if event.key in ll.letters and chr(event.key) not in self.guessed_letters:
                         self.guessed_letters.append(chr(event.key))
                         self.screenDim.fill(bgblue)
+                        pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
                         self.offset = 0
                         HangMan.call_print(xB, yB, self)
                         HangMan.print_guessed_char(xB, yB, self)
