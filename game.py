@@ -45,6 +45,17 @@ class HangMan:
         yB = 0
         self.screenDim.fill(bgblue) 
         pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
+        pygame.draw.rect(self.screenDim, black, pygame.Rect(xB+580, yB+350, 36, 36), 3, 35)
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+350), (xB+598, yB+330), 3)
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+330), (xB+650, yB+330), 3)
+        pygame.draw.line(self.screenDim, black, (xB+650, yB+330), (xB+650, yB+510), 3)
+        pygame.draw.line(self.screenDim, black, (xB+665, yB+510), (xB+600, yB+510), 3)
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+386), (xB+598, yB+440), 3)
+        #limbs
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+440), (xB+578, yB+460), 4)
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+440), (xB+618, yB+460), 4)
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+413), (xB+618, yB+413), 3)
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+413), (xB+578, yB+413), 3)
         HangMan.call_print(xB, yB, self)
         HangMan.print_guessed_char(xB, yB, self)
         while(self.gameover == False):
