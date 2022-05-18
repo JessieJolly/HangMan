@@ -1,3 +1,4 @@
+from cgitb import handler
 import pygame
 import random_list as r
 import random
@@ -9,6 +10,36 @@ black = "#242526"
 white = "#FFFFFF"
 
 class HangMan:
+    #drawing the 1st error line
+    def draw_error_one(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+665, yB+510), (xB+600, yB+510), 3)
+    #drawing the 2nd error line
+    def draw_error_two(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+650, yB+330), (xB+650, yB+510), 3)
+    #drawing the 3rd error line
+    def draw_error_three(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+330), (xB+650, yB+330), 3)
+    #drawing the 4th error line
+    def draw_error_four(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+350), (xB+598, yB+330), 3)
+    #drawing the 5th error line
+    def draw_error_five(xB, yB, self):
+        pygame.draw.rect(self.screenDim, black, pygame.Rect(xB+580, yB+350, 36, 36), 3, 35)
+    #drawing the 6th error line
+    def draw_error_six(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+386), (xB+598, yB+440), 3)
+    #drawing the 7th error line
+    def draw_error_seven(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+413), (xB+618, yB+413), 3)
+    #drawing the 8th error line
+    def draw_error_eight(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+413), (xB+578, yB+413), 3)
+    #drawing the 9th error line
+    def draw_error_nine(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+440), (xB+578, yB+460), 4)
+    #drawing the 10th error line
+    def draw_error_ten(xB, yB, self):
+        pygame.draw.line(self.screenDim, black, (xB+598, yB+440), (xB+618, yB+460), 4)
     #printing the guessed letters
     def print_guessed_char(xB, yB, self):
         font_style = pygame.font.Font("EvilEmpire.ttf", 30)
@@ -73,13 +104,55 @@ class HangMan:
                         xB = 0
                         yB = 0  
                     pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
+                    if(self.hits > 0):
+                        HangMan.draw_error_one(xB, yB, self)
+                    if(self.hits > 1):
+                        HangMan.draw_error_two(xB, yB, self)
+                    if(self.hits > 2):
+                        HangMan.draw_error_three(xB, yB, self)
+                    if(self.hits > 3):
+                        HangMan.draw_error_four(xB, yB, self)
+                    if(self.hits > 4):
+                        HangMan.draw_error_five(xB, yB, self)
+                    if(self.hits > 5):
+                        HangMan.draw_error_six(xB, yB, self)
+                    if(self.hits > 6):
+                        HangMan.draw_error_seven(xB, yB, self)
+                    if(self.hits > 7):
+                        HangMan.draw_error_eight(xB, yB, self)
+                    if(self.hits > 8):
+                        HangMan.draw_error_nine(xB, yB, self)
+                    if(self.hits > 9):
+                        HangMan.draw_error_ten(xB, yB, self)
                     HangMan.call_print(xB, yB, self)
                     HangMan.print_guessed_char(xB, yB, self)
                 if event.type == pygame.KEYDOWN: 
+                    self.screenDim.fill(bgblue)
+                    pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
                     if event.key in ll.letters and chr(event.key) not in self.guessed_letters:
+                        if(chr(event.key) not in self.arr):
+                            self.hits = self.hits+1
+                        if(self.hits > 0):
+                            HangMan.draw_error_one(xB, yB, self)
+                        if(self.hits > 1):
+                            HangMan.draw_error_two(xB, yB, self)
+                        if(self.hits > 2):
+                            HangMan.draw_error_three(xB, yB, self)
+                        if(self.hits > 3):
+                            HangMan.draw_error_four(xB, yB, self)
+                        if(self.hits > 4):
+                            HangMan.draw_error_five(xB, yB, self)
+                        if(self.hits > 5):
+                            HangMan.draw_error_six(xB, yB, self)
+                        if(self.hits > 6):
+                            HangMan.draw_error_seven(xB, yB, self)
+                        if(self.hits > 7):
+                            HangMan.draw_error_eight(xB, yB, self)
+                        if(self.hits > 8):
+                            HangMan.draw_error_nine(xB, yB, self)
+                        if(self.hits > 9):
+                            HangMan.draw_error_ten(xB, yB, self)
                         self.guessed_letters.append(chr(event.key))
-                        self.screenDim.fill(bgblue)
-                        pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
                         self.offset = 0
                         HangMan.call_print(xB, yB, self)
                         HangMan.print_guessed_char(xB, yB, self)
@@ -99,6 +172,7 @@ class HangMan:
         print(self.arr)
         self.guessed_letters = [] 
         self.offset = 0 
+        self.hits = 0
         HangMan.game_loop(self)
 
 pygame.init()
