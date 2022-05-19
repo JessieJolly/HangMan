@@ -1,4 +1,9 @@
-from cgitb import handler
+#A Hangman game made using the pygame module in python
+#The user can press keys to guess the letters in the word
+#He/She has 10 hits. If they dont guess the word by then, they loose the game
+#With each hit, the drawing takes form. The game ends when the drawing is complete
+#The user can view all guessed letter so far below the word
+#With each correct word guessed, the user gains 10 points
 import pygame
 import random_list as r
 import random
@@ -127,11 +132,22 @@ class HangMan:
                     HangMan.call_print(xB, yB, self)
                     HangMan.print_guessed_char(xB, yB, self)
                 if event.type == pygame.KEYDOWN: 
-                    self.screenDim.fill(bgblue)
-                    pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
                     if event.key in ll.letters and chr(event.key) not in self.guessed_letters:
+                        self.screenDim.fill(bgblue)
+                        pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
+                        self.guessed_letters.append(chr(event.key))
+                        self.offset = 0
+                        HangMan.call_print(xB, yB, self)
+                        HangMan.print_guessed_char(xB, yB, self)
                         if(chr(event.key) not in self.arr):
                             self.hits = self.hits+1
+                        self.has_guessed = True
+                        for letter in self.arr:
+                            if letter not in self.guessed_letters:
+                                self.has_guessed = False
+                                break
+                        if(self.has_guessed == True):
+                            self.gameover = True
                         if(self.hits > 0):
                             HangMan.draw_error_one(xB, yB, self)
                         if(self.hits > 1):
@@ -152,10 +168,6 @@ class HangMan:
                             HangMan.draw_error_nine(xB, yB, self)
                         if(self.hits > 9):
                             HangMan.draw_error_ten(xB, yB, self)
-                        self.guessed_letters.append(chr(event.key))
-                        self.offset = 0
-                        HangMan.call_print(xB, yB, self)
-                        HangMan.print_guessed_char(xB, yB, self)
 #test here
                         print(self.guessed_letters)
             pygame.display.update()
@@ -171,8 +183,10 @@ class HangMan:
 #test here
         print(self.arr)
         self.guessed_letters = [] 
+        self.has_guessed = False
         self.offset = 0 
         self.hits = 0
+        self.score = 0
         HangMan.game_loop(self)
 
 pygame.init()
