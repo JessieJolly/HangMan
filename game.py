@@ -143,13 +143,6 @@ class HangMan:
                             if letter not in self.guessed_letters:
                                 self.has_guessed = False
                                 break
-                        if(self.hits == 10):
-                            self.gameover = True
-                            return _score
-                        if(self.has_guessed == True):
-                            _score = _score + 10
-                            self.gameover = True
-                            return _score
                         if(self.hits > 0):
                             HangMan.draw_error_one(xB, yB, self)
                         if(self.hits > 1):
@@ -170,14 +163,22 @@ class HangMan:
                             HangMan.draw_error_nine(xB, yB, self)
                         if(self.hits > 9):
                             HangMan.draw_error_ten(xB, yB, self)
+                        if(self.hits == 10):
+                            self.gameover = True
+                            pygame.display.update()
+                            return _score
+                        if(self.has_guessed == True):
+                            _score = _score + 10
+                            self.gameover = True
+                            pygame.display.update()
+                            return _score
 #test here
                         print(self.guessed_letters)
             pygame.display.update()
 
-    def __init__(self, _score) -> None: 
+    def __init__(self, _score, _screenDim) -> None: 
         #initialising the game
-        pygame.display.set_caption("Let's play HangMan")
-        self.screenDim = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+        self.screenDim = _screenDim
         self.gameover = False
         self.end_game = False
         #finding a random word
@@ -190,14 +191,61 @@ class HangMan:
         self.offset = 0 
         self.hits = 0 
         score = HangMan.game_loop(self, _score)
+        xB = 0
+        yB = 0
         if(self.hits == 10):
             self.end_game = True
         if(self.end_game == False):
-            HangMan(score)
-        
+            HangMan(score, _screenDim)
+        while(self.end_game == True):
+            font_style = pygame.font.Font("EvilEmpire.ttf", 60) 
+            mesg = font_style.render("Game over", True, black)
+            self.screenDim.fill(bgblue)
+            pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
+            HangMan.draw_error_one(xB, yB, self) 
+            HangMan.draw_error_two(xB, yB, self) 
+            HangMan.draw_error_three(xB, yB, self) 
+            HangMan.draw_error_four(xB, yB, self) 
+            HangMan.draw_error_five(xB, yB, self) 
+            HangMan.draw_error_six(xB, yB, self) 
+            HangMan.draw_error_seven(xB, yB, self) 
+            HangMan.draw_error_eight(xB, yB, self) 
+            HangMan.draw_error_nine(xB, yB, self) 
+            HangMan.draw_error_ten(xB, yB, self)
+            HangMan.print_score(xB, yB, self, score)
+            self.screenDim.blit(mesg, [xB+260, yB+180])
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.end_game = False
+                if event.type == pygame.VIDEORESIZE: 
+                    self.screenDim.fill(bgblue)
+                    w, h = pygame.display.get_surface().get_size()
+                    self.offset = 0 
+                    if w!=800:
+                        xB = (w-800)/2
+                        yB = (h-600)/2
+                    else:
+                        xB = 0
+                        yB = 0 
+                    pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
+                    HangMan.draw_error_one(xB, yB, self) 
+                    HangMan.draw_error_two(xB, yB, self) 
+                    HangMan.draw_error_three(xB, yB, self) 
+                    HangMan.draw_error_four(xB, yB, self) 
+                    HangMan.draw_error_five(xB, yB, self) 
+                    HangMan.draw_error_six(xB, yB, self) 
+                    HangMan.draw_error_seven(xB, yB, self) 
+                    HangMan.draw_error_eight(xB, yB, self) 
+                    HangMan.draw_error_nine(xB, yB, self) 
+                    HangMan.draw_error_ten(xB, yB, self)
+                    HangMan.print_score(xB, yB, self, score)
+                    self.screenDim.blit(mesg, [xB+260, yB+180])
+            pygame.display.update()
 
 pygame.init()
 score = 0
-HangMan(score)
+pygame.display.set_caption("Let's play HangMan")
+_screenDim = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+HangMan(score, _screenDim)
 pygame.quit()
 quit()
