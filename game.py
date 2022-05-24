@@ -82,8 +82,14 @@ class HangMan:
                     HangMan.print_char(xB, yB, i, self)
     #game loop
     def game_loop(self, _score):
-        xB = 0
-        yB = 0
+        w, h = pygame.display.get_surface().get_size()
+        self.offset = 0 
+        if w!=800:
+            xB = (w-800)/2
+            yB = (h-600)/2
+        else:
+            xB = 0
+            yB = 0 
         self.screenDim.fill(bgblue) 
         pygame.draw.rect(self.screenDim, white, pygame.Rect(xB+80, yB+130, 630, 130))
         HangMan.print_score(xB, yB, self, _score)
@@ -92,7 +98,9 @@ class HangMan:
         while(self.gameover == False):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.end_game = True
                     self.gameover = True
+                    return _score
                 if event.type == pygame.VIDEORESIZE: 
                     self.screenDim.fill(bgblue)
                     w, h = pygame.display.get_surface().get_size()
@@ -191,8 +199,13 @@ class HangMan:
         self.offset = 0 
         self.hits = 0 
         score = HangMan.game_loop(self, _score)
-        xB = 0
-        yB = 0
+        w, h = pygame.display.get_surface().get_size()
+        if w!=800:
+            xB = (w-800)/2
+            yB = (h-600)/2
+        else:
+            xB = 0
+            yB = 0
         if(self.hits == 10):
             self.end_game = True
         if(self.end_game == False):
